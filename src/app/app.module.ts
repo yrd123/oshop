@@ -21,6 +21,11 @@ import { LoginComponent } from './login/login.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { AuthGuardService } from './services/auth-guard.service';
+import { ProductFormComponent } from './admin/product-form/product-form.component';
+import { CategoryService } from './services/category.service';
+import { ProductService } from './services/product.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +40,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AdminProductsComponent,
     AdminOrdersComponent,
     LoginComponent,
+    ProductFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,16 +53,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       { path:"", component:HomeComponent },
       { path:"products", component:ProductsComponent },
       { path:"login", component:LoginComponent },
-      { path:"orders", component:MyOrdersComponent },
-      { path:"shopping-cart", component:ShoppingCartComponent },
-      { path:"check-out", component:CheckOutComponent },
+      { path:"orders", component:MyOrdersComponent, canActivate:[AuthGuardService] },
+      { path:"shopping-cart", component:ShoppingCartComponent},
+      { path:"check-out", component:CheckOutComponent , canActivate:[AuthGuardService] },
       { path:"order-success", component:OrderSuccessComponent },
       { path:"admin/orders", component:AdminOrdersComponent },
       { path:"admin/products", component:AdminProductsComponent },
+      { path:"admin/products/new", component:ProductFormComponent },
     ]),
     NgbModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    AuthGuardService,
+    CategoryService, 
+    ProductService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
